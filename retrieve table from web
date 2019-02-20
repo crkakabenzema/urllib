@@ -1,0 +1,15 @@
+from bs4 import BeautifulSoup
+import urllib
+from urllib import request
+import pandas as pd
+import openpyxl
+url = 'https://segmentfault.com/a/1190000018129846'
+page = request.urlopen(url)
+html = page.read().decode()
+soup = BeautifulSoup(html, 'lxml')
+tables = soup.select('table')
+df_list = []
+for table in tables:
+    df_list.append(pd.concat(pd.read_html(table.prettify())))
+df = pd.concat(df_list)
+df.to_excel('1.xlsx')
