@@ -1,0 +1,61 @@
+class Infodisplay():
+    import tkinter as tk
+    from tkinter import tix
+    def __init__(self,master = None):
+        self.window = self.tix.Tk()
+        self.window.title('AAA')
+        self.window.maxsize(510,500)
+        self.window.minsize(510,500)
+        self.set_menu()
+        #self.lable_show = self.tk.Label(text='', anchor='se', font=('黑体', 30),bg='white', fg='black')
+        #self.lable_show.place(x=3,y=3,width=500,height=72)
+        self.monitor = self.tk.Text()        # Text editor
+        self.monitor['cursor']='hand2'
+        self.monitor.place(x=3,y=80,width=500,height=300)
+        self.set_buttons()
+        self.window.mainloop()
+
+    def set_menu(self):pass
+        
+    def set_buttons(self):
+        self.buttonInsertText = self.tk.Button(text='data input)
+        self.buttonInsertText.place(x=0,y=0)
+        self.buttonInsertText.bind('<Button-1>',self.retrieveData)
+        self.buttonInsertImage = self.tk.Button(text='img input')      
+        self.buttonInsertImage.place(x=100,y=0)
+        self.buttonInsertImage.bind('<Button-1>',self.retrieveImage)
+        self.buttonEnterUrl = self.tk.Entry(background='white')        #enter url
+        self.buttonEnterUrl.place(x=0,y=50)
+        self.buttonInsertUrl = self.tk.Button(text='web page input')      #output the data from the given url
+        self.buttonInsertUrl.place(x=200,y=0)
+        self.buttonInsertUrl.bind('<Button-1>',self.retrieveData)
+
+    def retrieveData(self,e):
+        self.urlretrieved = self.buttonEnterUrl.get()
+        self.text = Contentget.contentget(Contentget,url='http://'+ self.urlretrieved)
+        for i in range(len(self.text)):
+            self.monitor.insert('1.0',self.text[i])    #insert the given text at the given index [line,column]
+        #self.monitor['state'] = 'disabled'             #enable the text widget not to respond
+
+    def retrieveImage(self,e):
+        self.image = self.tk.PhotoImage(file)  #construct a image
+        self.monitor.image_create(index=[0.1],image=self.image) #insert image in the TextLabel #index [line,column]
+        
+class Contentget():                   
+    def contentget(self,url,beg=0):
+        from urllib import request
+        self.page = request.urlopen(url)
+        self.html = self.page.read().decode()               #above lines are to get html
+        str0 = '<article class="article-content">'       
+        self.content = self.html.partition(str0)[2]         #patrition(str) (head,sep,tail)
+        str1 = '<div class="article-social">'
+        self.content = self.content.partition(str1)[0]      #above lines are to get content  
+        try:
+            self.title_list = []
+            while True:
+                num1 = self.content.index('】',beg)     #plus 3 characters if chinese character
+                num2 = self.content.index('</p>',num1)
+                self.title_list.append(self.content[num1:num2])
+                beg = num2
+        except ValueError:
+               return self.title_list                       #above lines are to get titles
