@@ -1,0 +1,33 @@
+b=[]
+c=[]
+k=0
+for line in open(r'.txt').readlines():
+    a=line.strip('\n').split()
+    mark=len(a)
+    c.append(mark)
+    for i in range(mark):
+        a[i]='<td>'+a[i]+'</td>'
+        b.append(a[i])
+flineap=open(r'.txt',mode='w')
+
+for i in range(1,len(c)):
+    c[i]=c[i]+c[i-1]
+
+for i in range(len(b)):
+    if i==0:
+        flineap.write('<tr>')
+        flineap.write('\n')
+    if i==c[k]:
+        flineap.write(r'</tr>')
+        flineap.write('\n')
+        flineap.write(r'<tr>')
+        flineap.write('\n')
+        flineap.write(b[i])
+        flineap.write('\n')
+        k=k+1
+    else:
+        flineap.write(b[i])
+        flineap.write('\n')
+
+flineap.write(r'</tr>')   
+flineap.close()
